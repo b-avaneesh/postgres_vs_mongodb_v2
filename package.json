@@ -1,0 +1,27 @@
+{
+  "name": "postgres_vs_mongo_v2",
+  "version": "1.0.0",
+  "description": "Welcome to DB comparison project involving Postgres and MongoDB (V2)",  
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b-avaneesh/postgres_vs_mongodb_v2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/b-avaneesh/postgres_vs_mongodb_v2/issues"
+  },
+  "homepage": "https://github.com/b-avaneesh/postgres_vs_mongodb_v2#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
