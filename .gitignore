@@ -1,3 +1,5 @@
 /node_modules
 .env
 problems_documentation.txt
+/js_files
+pg.md
