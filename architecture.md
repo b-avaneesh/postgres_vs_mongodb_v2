@@ -14,3 +14,17 @@ MongoDB:
 users Collection: Holds flat user profile documents.
 orders Collection: Each document contains an array of item sub-documents.
 products Collection: Inventory of products with nos available.
+
+Data generation:
+             Faker Generator
+                    │
+                    ▼
+         Canonical Dataset (Source of Truth)
+                    │
+     ┌──────────────┴──────────────┐
+     ▼                             ▼
+Postgres Export              Mongo Export
+(users)                      (users)
+(products)                   (products)
+(orders)                     (orders + embedded items)
+(order_items)

@@ -1,35 +1,32 @@
 {
   "name": "postgres_vs_mongo_v2",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js"
-  },
   "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/b-avaneesh/postgres_vs_mongodb_v2.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/b-avaneesh/postgres_vs_mongodb_v2/issues"
-  },
-  "homepage": "https://github.com/b-avaneesh/postgres_vs_mongodb_v2#readme",
-  "description": "SQL vs NoSQL comparison project",
-  "dependencies": {
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "mongoose": "^9.7.3",
-    "pg": "^8.22.0"
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:gateway": "tsx watch src/server.ts",
+    "dev:postgres": "npm run dev -w packages/postgres",
+    "dev:mongo": "npm run dev -w packages/mongo",
+    "dev": "concurrently \"npm run dev:gateway\" \"npm run dev:postgres\" \"npm run dev:mongo\""
   },
   "devDependencies": {
-    "@types/express": "^5.0.6",
     "@types/node": "^26.0.1",
+    "@types/pg": "^8.20.0",
+    "concurrently": "^9.1.0",
+    "dotenv": "^17.4.2",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.5.0",
+    "@json2csv/plainjs": "^7.0.6",
+    "@types/express": "^5.0.6",
+    "axios": "^1.18.1",
+    "express": "^5.2.1",
+    "json2csv": "^6.0.0-alpha.2",
+    "uuid": "^14.0.1"
   }
 }

@@ -1,14 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
+import router from "../routes/gateway.routes.js";
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+app.use(router);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Gateway Server running on port ${PORT}`);
 });

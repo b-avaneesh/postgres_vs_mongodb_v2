@@ -1,5 +1,19 @@
-/node_modules
-.env
+# Dependencies
+**/node_modules/
+
+# Environment files
+**/.env
+**/.env.*
+
+# Documentation
+**/documentation/
+**/docs/
+**/*documentation*
 problems_documentation.txt
-/js_files
 pg.md
+
+# Generated JS files (if applicable)
+/js_files/
+
+# Generated data.
+/data
