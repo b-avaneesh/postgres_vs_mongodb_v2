@@ -1,21 +1,17 @@
 import { ObjectId } from "mongodb";
 
 export interface OrderItem {
-    productId: ObjectId;
+    product_id: string,
+    quantity:number,
+    price_per_unit:number
 
-    quantity: number;
-
-    pricePerUnit: number;
 }
 
-export interface Order {
-    _id?: ObjectId;
+export interface Orders{
+    id: string,
+    user_id:string,
+    items: OrderItem[],
+    created_at: Date,
+    status:string
 
-    userId: ObjectId;
-
-    status: "Pending" | "Completed" | "Cancelled";
-
-    createdAt: Date;
-
-    items: OrderItem[];
 }
