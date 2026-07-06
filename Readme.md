@@ -233,78 +233,118 @@ Execute load tests:
 k6 run k6/benchmark.js
 ```
 ----
-# Benchmark Findings
+# Benchmark Results (V1)
 
-## V1: Initial Benchmark (MongoDB ORM vs PostgreSQL Native)
+The following results were collected using **k6** for load generation, **Prometheus** for metrics collection, and **Grafana** for visualization.
 
-The first benchmark compared a MongoDB implementation using an ORM against a PostgreSQL implementation using native SQL queries under a mixed workload.
+## Dashboard
 
-### Test Configuration
+<p align="center">
+  <img src="documentation/v1-dashboard.png" alt="V1 Benchmark Dashboard" width="100%">
+</p>
 
-* **Concurrent Users:** 50 virtual users
-* **Dataset:**
-
-  * 5,000 Users
-  * ~20,000 Orders
-  * ~15,000 Products
-  * ~15,000 Additional transactional records
-* **Workload:**
-
-  * CRUD operations
-  * Complex joins
-  * Aggregation queries
-  * Transaction processing
-* **Metrics Collected:**
-
-  * Throughput (requests/sec)
-  * Average latency
-  * P95/P99 latency
-  * Event loop lag
-  * Consistency validation
-
-### Results
-
-| Metric          | MongoDB          | PostgreSQL   | Observation                                                       |
-| --------------- | ---------------- | ------------ | ----------------------------------------------------------------- |
-| Throughput      | ~14–15 req/s     | ~10–11 req/s | MongoDB handled approximately **35% higher throughput**.          |
-| Average Latency | ~500–550 ms      | ~100–120 ms  | PostgreSQL responded roughly **4–5× faster** on average.          |
-| P95 Latency     | Peaks up to ~5 s | Below ~1 s   | PostgreSQL maintained significantly more consistent tail latency. |
-| Event Loop Lag  | ~0.0035 ms       | ~0.0025 ms   | PostgreSQL exhibited approximately **28% lower event loop lag**.  |
-
-### Observations
-
-Although MongoDB achieved higher overall throughput, PostgreSQL consistently delivered:
-
-* Lower average response times
-* Better tail latency (P95)
-* Lower event loop lag
-* More predictable performance under load
-
-One limitation of the initial benchmark was that a **single k6 script executed multiple API endpoints simultaneously**, making it difficult to attribute performance characteristics to individual database operations.
 
 ---
 
-# V2: Native-Level Benchmark (Current Work)
+## Test Configuration
 
-The second iteration focuses on isolating database behavior by benchmarking individual operations independently.
+| Parameter | Value |
+|-----------|-------|
+| Concurrent Users | 50 Virtual Users |
+| Dataset | 5,000 Users |
+| Orders | ~20,000 |
+| Products | ~15,000 |
+| Additional Transactional Records | ~15,000 |
+| Workload | CRUD Operations, Joins, Aggregations, Transactions |
+| Monitoring | Prometheus + Grafana |
+| Load Generator | k6 |
 
-## Objectives
+---
 
-* Benchmark each API operation separately.
-* Eliminate workload interference between different request types.
-* Produce operation-specific latency and throughput metrics.
-* Improve reproducibility of benchmark results.
+## Metrics Collected
 
-## Changes from V1
+- Throughput (Requests/sec)
+- Average Latency
+- P95 Latency
+- Event Loop Lag
 
-* Separate k6 script for every API endpoint.
-* Smaller and more focused dataset.
-* Cleaner benchmarking methodology.
-* Easier comparison of equivalent database operations.
-* Improved analysis of CRUD, aggregation, and transaction performance independently.
+---
 
-The goal of V2 is to provide a more accurate comparison of PostgreSQL and MongoDB at the database operation level rather than relying on aggregate workload measurements.
+## Results
 
+| Metric | MongoDB | PostgreSQL | Observation |
+|---------|----------|------------|-------------|
+| Throughput | ~14–15 req/s | ~10–11 req/s | MongoDB achieved approximately **35% higher throughput**. |
+| Average Latency | ~500–550 ms | ~100–120 ms | PostgreSQL responded **4–5× faster** on average. |
+| P95 Latency | Peaks up to ~5 s | Consistently below ~1 s | PostgreSQL maintained significantly more stable tail latency. |
+| Event Loop Lag | ~0.0035 ms | ~0.0025 ms | PostgreSQL exhibited approximately **28% lower event loop lag**. |
+
+---
+
+## Analysis
+
+### Throughput
+
+MongoDB sustained a higher request rate throughout the benchmark, reaching approximately **15 requests/sec**, while PostgreSQL stabilized around **10–11 requests/sec**.
+
+This suggests that MongoDB handled concurrent CRUD-heavy workloads more efficiently in terms of overall throughput.
+
+---
+
+### Average Latency
+
+Despite the lower throughput, PostgreSQL consistently delivered much lower response times.
+
+Average request latency remained close to **100–120 ms**, whereas MongoDB gradually increased to approximately **500–550 ms** under load.
+
+---
+
+### P95 Latency
+
+Tail latency showed the most noticeable difference.
+
+PostgreSQL maintained a relatively stable P95 latency below **1 second**, while MongoDB experienced spikes approaching **5 seconds** during heavier load.
+
+This indicates PostgreSQL provided more predictable response times under stress.
+
+---
+
+### Event Loop Lag
+
+Node.js event loop lag remained low for both implementations.
+
+However, PostgreSQL consistently exhibited lower lag, averaging approximately **0.0025 ms** compared to MongoDB's **0.0035 ms**, suggesting slightly more efficient request processing.
+
+---
+
+## Limitations of V1
+
+The first benchmark used **a single k6 script that invoked multiple API endpoints simultaneously**.
+
+Although this provided an overall comparison between the two databases, it introduced several limitations:
+
+- Performance characteristics of individual operations could not be isolated.
+- CRUD, aggregation, and transaction workloads were mixed together.
+- It was difficult to determine which API contributed most to latency spikes.
+- Results represented aggregate system performance rather than operation-specific performance.
+
+---
+
+# V2 Benchmark (Current Work)
+
+The second iteration of the benchmark addresses the limitations identified in V1.
+
+## Improvements
+
+- Separate k6 script for each API endpoint.
+- Individual benchmarking of CRUD operations.
+- Independent benchmarking of aggregation queries.
+- Cleaner workload isolation.
+- Smaller and more controlled dataset.
+- Easier comparison of equivalent PostgreSQL and MongoDB operations.
+- More reproducible benchmark results.
+
+The objective of V2 is to evaluate database performance **at the operation level**, allowing each endpoint to be analyzed independently instead of aggregating multiple workloads into a single benchmark.
 
 ---
 
