@@ -11,6 +11,15 @@ import {
 export const options = {
     vus: 20,
     duration: "30s",
+    thresholds: {
+    http_req_duration: [
+        "p(95)<500", // Generally P95 should be less than 500ms
+    ],
+
+    http_req_failed: [
+        "rate<0.01", 
+    ],
+    }
 };
 
 const ORDER_STATUS = [
