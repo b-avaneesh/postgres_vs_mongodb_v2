@@ -240,7 +240,7 @@ The following results were collected using **k6** for load generation, **Prometh
 ## Dashboard
 
 <p align="center">
-  <img src="documentation/v1-dashboard.png" alt="V1 Benchmark Dashboard" width="100%">
+  <img src="image/v1-dashboard.png" alt="V1 Benchmark Dashboard" width="100%">
 </p>
 
 
